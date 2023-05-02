@@ -19,7 +19,7 @@ public class EventController {
     }
 
     @GetMapping("/get-event/date/{date}")
-    public Event getbyDate(@PathVariable String date){
+    public Event get_Date(@PathVariable String date){
         return eventService.getEventByDate(date);
     }
     @PostMapping("/add-event")

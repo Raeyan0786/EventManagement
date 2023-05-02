@@ -3,9 +3,10 @@ package com.example.EventManagement.service;
 import com.example.EventManagement.model.Event;
 import com.example.EventManagement.repository.IEventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
-
+@Service
 public class EventService implements IEventService {
     @Autowired
     IEventRepository iEventRepository;

@@ -2,9 +2,14 @@ package com.example.EventManagement.controller;
 
 import com.example.EventManagement.model.Student;
 import com.example.EventManagement.service.StudentService;
+import com.example.EventManagement.utils.UserValidator;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -21,12 +26,38 @@ public class StudentController {
         return  studentService.getById(id);
     }
     @PostMapping("/add-student")
-    public void add_student(@RequestBody Student student){
-        studentService.addStudent(student);
+    public ResponseEntity<String> add_student(@RequestBody String student){
+        JSONObject jsonObject=new JSONObject(student);
+
+        List<String> valid= UserValidator.isValidUser(jsonObject);
+        if(valid.isEmpty()){
+            Student newUser=studentService.setStudent(jsonObject);
+            studentService.addStudent(newUser);
+            return new ResponseEntity<>("user saved", HttpStatus.CREATED);
+        }
+        String[] answer = Arrays.copyOf(
+                valid.toArray(), valid.size(), String[].class);
+
+        return new ResponseEntity<>("Please pass these mandatory parameters- " +
+                Arrays.toString(answer), HttpStatus.BAD_REQUEST);
+
     }
     @PutMapping("update-student/by/id/{id}")
-    public void update_student(@PathVariable int id,@RequestBody Student student){
-        studentService.updateStudent(id,student);
+    public ResponseEntity<String> update_student(@PathVariable int id,@RequestBody String student){
+        JSONObject jsonObject=new JSONObject(student);
+
+        List<String> valid= UserValidator.isValidUser(jsonObject);
+        if(valid.isEmpty()){
+            Student newUser=studentService.setStudent(jsonObject);
+            studentService.addStudent(newUser);
+            return new ResponseEntity<>("user updated", HttpStatus.OK);
+        }
+        String[] answer = Arrays.copyOf(
+                valid.toArray(), valid.size(), String[].class);
+
+        return new ResponseEntity<>("Please pass these mandatory parameters- " +
+                Arrays.toString(answer), HttpStatus.BAD_REQUEST);
+
     }
     @DeleteMapping("/delete-student/by/id/{id}")
     public void delete_student(@PathVariable int id){

@@ -4,7 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+//import javax.persistence.*;
+import jakarta.persistence.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,6 +21,6 @@ public class Student {
     private String last_name;
     @Column
     private int age;
-    @Column
-    private String department;
+    @Enumerated(EnumType.STRING)//only for watching strings in DB.
+    private Department department;//CAN ONLY BE ME , ECE , civil , CSE
 }
